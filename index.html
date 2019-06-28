@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My first Vue app</title>
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <div id="app">
+      <h1>Mario Maker 2 Roulette</h1>
+      <p><b>Amount of Objects</b></p>
+      Min <button v-on:click="minDown">-</button> {{min}} <button v-on:click="minUp">+</button><br>
+      Max <button v-on:click="maxDown">-</button> {{max}} <button v-on:click="maxUp">+</button><br>
+
+    <p><b>Object types to include</b></p>
+      <input type="checkbox" id="enemiesbox" v-model="enemiesBool">
+      <label for="enemiesbox">Enemies</label>
+      <input type="checkbox" id="bossbox" v-model="bossBool">
+      <label for="bossbox">Bosses</label>
+      <input type="checkbox" id="powerupbox" v-model="powerupsBool">
+      <label for="powerupbox">Powerups</label>
+      <input type="checkbox" id="pickupbox" v-model="pickupsBool">
+      <label for="pickupbox"></label>Pickups</label>
+      <input type="checkbox" id="terrainbox" v-model="terrainBool">
+      <label for="terrainbox">Terrain</label>
+      <input type="checkbox" id="hazardbox" v-model="hazardsBool">
+      <label for="hazardbox">Hazards</label>
+      <input type="checkbox" id="gizmobox" v-model="gizmosBool">
+      <label for="gizmobox">Gizmos</label>
+      <p><b>Additional options</b></p>
+      <input type="checkbox" id="themebox" v-model="themeBool">
+      <label for="themebox">Theme?</label>
+      <input type="checkbox" id="timebox" v-model="timeBool">
+      <label for="timebox">Day/Night?</label>
+      <input type="checkbox" id="gamebox" v-model="gameBool">
+      <label for="gamebox">Game?</label>
+      <br>
+      <button v-on:click="run">Roll!</button> <br>
+      <p v-for="e in display">{{e}}</p>
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        min: 2,
+        max: 5,
+        enemiesBool: true,
+        bossBool: false,
+        powerupsBool: false,
+        pickupsBool: false,
+        terrainBool: true,
+        hazardsBool: true,
+        gizmosBool: true,
+        themeBool: false,
+        timeBool: false,
+        gameBool: false,
+        elements:[
+            "Bowser"
+        ],
+        enemies:[
+            "Goombas", "Koopas", "Buzzy Beetles", "Spike Tops", "Spinies", "Bloopers", "Cheep Cheeps", "Piranha Plants", "Munchers", "Thwomps", 
+            "Monty Moles", "Rocky Wrenches", "Hammer Bros", "Chain Chomps", "Wigglers", "Boos", "Lava Bubbles", "Bob-ombs", "Dry Bones", "Fish Bones", 
+            "Kameks", "Lakitu", "Angry Sun/Moon", "Bill Blasters", "Banzai Bills", "Twisters"
+        ],
+        bosses:[
+            "Bowser", "Bowser Jr.", "Boom Boom"
+        ],
+        powerups:[
+            "Fire Flower", "Super Star", "Yoshi/Goomba Shoe", "Lakitu Cloud", "Game-Exclusive Powerup", "Clown Cars"
+        ],
+        pickups:[
+            "1-ups", "Coins", "Red Coins", "Big Coins", 
+        ],
+        terrain:[
+            "Mushroom Platforms", "Warp Pipes", "Spikes", "Slopes", "Semisolid Platforms", "Ice Blocks", "Bricks", "? Blocks", "Donut Blocks", "Note Blocks", "Cloud Blocks"
+        ],
+        hazards:[
+            "Burners", "Cannons", "Icicles", "Spike Pillars", "Grinders", "Fire Bars"
+        ],
+        gizmos:[
+            "Doors", "P-switches", "POW blocks", "Springs", "Vines", "Lifts", "Lava Lifts", "Seesaws", "Bumpers", "Swinging Lifts", "ON/OFF Switches", "Snake Blocks",
+            "One-Way Walls", "Conveyor Belts", "Tracks"],
+        themes:[
+            "Ground", "Sky", "Underground", "Forest", "Underwater", "Castle", "Desert", "Airship", "Snow", "Ghost House"
+        ],
+        times:[
+            "Day", "Night"
+        ],
+        games:[
+            "Super Mario Bros", "Super Mario Bros 3", "Super Mario World", "New Super Mario Bros U"
+        ],
+        display:[
+
+        ],
+        maxAmount: 0,
+      },
+      methods:{
+            run: function() {
+                var currentIndex = this.elements.length, temporaryValue, randomIndex;
+                var amount = 0;
+                this.display = [];
+                this.elements = [];
+
+                if(this.enemiesBool == true){
+                    this.elements.push.apply(this.elements, this.enemies)
+                }
+                if(this.bossBool == true){
+                    this.elements.push.apply(this.elements, this.bosses)
+                }
+                if(this.powerupsBool == true){
+                    this.elements.push.apply(this.elements, this.powerups)
+                }
+                if(this.pickupsBool == true){
+                    this.elements.push.apply(this.elements, this.pickups)
+                }
+                if(this.terrainBool == true){
+                    this.elements.push.apply(this.elements, this.terrain)
+                }
+                if(this.hazardsBool == true){
+                    this.elements.push.apply(this.elements, this.hazards)
+                }
+                if(this.gizmosBool == true){
+                    this.elements.push.apply(this.elements, this.gizmos)
+                }
+                console.log(this.elements)
+
+                // While there remain elements to shuffle...
+                currentIndex = this.elements.length
+                while (0 !== currentIndex) {
+                    // Pick a remaining element...
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex -= 1;
+
+                    // And swap it with the current element.
+                    temporaryValue = this.elements[currentIndex];
+                    this.elements[currentIndex] = this.elements[randomIndex];
+                    this.elements[randomIndex] = temporaryValue;
+                }
+                console.log(this.elements)
+                this.maxAmount = Math.floor(Math.random()*(this.max - this.min + 1) + this.min)
+                while(amount < this.maxAmount){
+                    this.display.push(this.elements[amount])
+                    amount+=1
+                }
+                if(this.themeBool == true){
+                    if(this.timeBool == true){
+                        this.display.push("THEME: "+this.themes[Math.floor(Math.random()*10)] + " " + this.times[Math.floor(Math.random()*2)])
+                    }else{
+                        this.display.push("THEME: "+this.themes[Math.floor(Math.random()*10)])
+                    }
+                    
+                }
+                if(this.gameBool == true){
+                    this.display.push("GAME: "+this.games[Math.floor(Math.random()*4)])
+                }
+
+            },
+            minDown: function() {
+                if(this.min > 1){
+                    this.min -=1
+                }
+            },
+            minUp: function() {
+                if(this.min < this.max){
+                    this.min +=1
+                }
+            },
+            maxDown: function(){
+                if(this.max > 1 && this.max > this.min){
+                    this.max -= 1
+                }
+            },
+            maxUp: function(){
+                this.max+=1
+            }
+        }
+    })
+  </script>
+</body>
+</html>
